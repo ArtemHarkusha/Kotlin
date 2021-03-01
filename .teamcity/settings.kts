@@ -28,6 +28,7 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2020.2"
 
 project {
+    vcsRoot(KotlinGit)
     buildType(UnitTests)
     buildType(StaticSite)
     buildType(FunctionApp)
@@ -43,6 +44,11 @@ project {
 
 object UnitTests: BuildType({
     name = "Unit Tests"
+
+    vcs {
+        root(KotlinGit)
+    }
+
     steps {
         script {
             scriptContent = "echo 'executing unit tests'"
@@ -70,4 +76,16 @@ object FunctionApp: BuildType({
             scriptContent = "echo 'executing Function App build'"
         }
     }
+})
+
+object KotlinGit: GitVcsRoot({
+    name = "Kotlin Git"
+    url = "https://github.com/ArtemHarkusha/Kotlin.git"
+    branch = "main"
+    authMethod = uploadedKey {
+            userName = ""
+            uploadedKey = "id_rsa"
+            passphrase = ""
+        }
+
 })
