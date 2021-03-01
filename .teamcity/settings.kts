@@ -1,4 +1,5 @@
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.script
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -25,4 +26,43 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2020.2"
 
 project {
+    buildType(UnitTests)
+    buildType(StaticSite)
+    buildType(FunctionApp)
+
+    sequential  {
+        buildType(UnitTests)
+        parallel () {
+            buildType(StaticSite)
+            buildType(FunctionApp)
+        }
+    }
 }
+
+object UnitTests: BuildType({
+    name = "Unit Tests"
+    steps {
+        script {
+            scriptContent = "echo 'executing unit tests'"
+        }
+    }
+})
+
+object StaticSite: BuildType({
+    name = "Static Site"
+    steps {
+        script {
+            scriptContent = "echo 'executing Static Site build'"
+        }
+    }
+})
+
+object FunctionApp: BuildType({
+    name = "Function App"
+    steps {
+        script {
+            scriptContent = "echo 'executing Function App build'"
+        }
+    }
+})
+
